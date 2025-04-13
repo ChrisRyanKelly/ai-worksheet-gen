@@ -75,7 +75,7 @@ worksheet-generator/
 1. Clone the repository
 
 ```shell
-git clone https://github.com/your-username/worksheet-generator
+git clone https://github.com/ChrisRyanKelly/ai-worksheet-gen.git
 cd worksheet-generator
 ```
 
