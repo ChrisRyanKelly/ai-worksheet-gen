@@ -31,9 +31,6 @@
     }
     .header img {
       max-height: 160px;
-      height: auto;
-      width: auto;
-      max-width: 100%;
       filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.15));
     }
     label {
@@ -90,7 +87,7 @@
       background: #fff;
       border: 1px solid #ddd;
       border-radius: 8px;
-      padding: 30px;
+      padding: 20px;
       font-size: 1rem;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
@@ -109,12 +106,12 @@
       margin-bottom: 10px;
     }
     .question-block {
-      margin-bottom: 30px;
+      margin-bottom: 14px;
     }
     .question-line {
       border-bottom: 1px solid #ccc;
-      height: 40px;
-      margin-top: 10px;
+      height: 30px;
+      margin-top: 8px;
     }
     .footer {
       text-align: center;
@@ -134,29 +131,35 @@
       margin-left: 0.5rem;
     }
     @keyframes spinner {
-      100% { transform: rotate(360deg); }
+      100% {
+        transform: rotate(360deg);
+      }
     }
     @media print {
-      .header, .footer, .btn-gold, .btn-slim, .form-select, .form-control, label {
+      .header, .footer, .btn-gold, .btn-slim, .form-select, .form-control, label, #feedback-section {
         display: none !important;
       }
       body {
         background: white !important;
+        font-size: 13.5px !important;
       }
       #output {
         border: none !important;
         box-shadow: none !important;
         padding: 0;
+        font-size: 17px;
       }
       #output h2 {
-        font-size: 1.5rem;
+        font-size: 1.65rem;
+      }
+      .question-line {
+        height: 30px !important;
       }
     }
   </style>
 </head>
 <body class="p-3">
   <div class="container">
-
     <div class="header">
       <img src="assets/collab-logo.png" alt="Ysgol Brynhyfryd × OpenAI Logo" />
     </div>
@@ -193,7 +196,7 @@
     <input type="number" id="numQuestions" class="form-control" min="1" max="10" value="5" />
 
     <button id="generate-btn" class="btn btn-gold w-100 mb-3 d-flex align-items-center justify-content-center" style="gap: 5px;">
-      <img src="assets/blossom.png" alt="OpenAI Logo" style="height: 20px; vertical-align: middle;" />
+      <img src="assets/blossom.png" alt="OpenAI Logo" style="height: 20px;" />
       <span id="btn-text">Generate</span>
     </button>
 
@@ -206,8 +209,26 @@
       <div id="output" contenteditable="false"></div>
     </div>
 
+    <!-- Feedback Section -->
+    <div id="feedback-section" style="margin-top: 20px; display: none;">
+      <label for="rating">⭐ Rate Prompt Effectiveness</label>
+      <select id="rating" class="form-select">
+        <option value="">Select rating</option>
+        <option value="1">1 - Poor</option>
+        <option value="2">2 - Fair</option>
+        <option value="3">3 - Good</option>
+        <option value="4">4 - Very Good</option>
+        <option value="5">5 - Excellent</option>
+      </select>
+
+      <label for="comment">💬 Feedback (optional)</label>
+      <textarea id="comment" class="form-control" rows="3" placeholder="Let us know how it went..."></textarea>
+      <button id="submit-feedback" class="btn btn-outline-secondary w-100 mt-2">📩 Submit Feedback</button>
+      <div id="feedback-msg" class="text-success text-center mt-2" style="display: none;">✅ Feedback submitted successfully!</div>
+    </div>
+
     <div class="footer">
-      Powered by OpenAI · Approved by <strong>Teachers</strong>
+      Powered by ChatGPT · Approved by <strong>Teachers</strong>
     </div>
   </div>
 
@@ -217,15 +238,15 @@ const output = document.getElementById("output");
 const wrapper = document.getElementById("output-wrapper");
 const toggleEditBtn = document.getElementById("toggle-edit");
 const copyBtn = document.getElementById("copy-btn");
+const feedbackSection = document.getElementById("feedback-section");
+const feedbackMsg = document.getElementById("feedback-msg");
 
-// Lock/Unlock toggle
 toggleEditBtn.addEventListener("click", () => {
   const editable = output.getAttribute("contenteditable") === "true";
   output.setAttribute("contenteditable", !editable);
   toggleEditBtn.textContent = editable ? "🔒 Locked" : "📝 Editing";
 });
 
-// Copy to Clipboard
 copyBtn.addEventListener("click", () => {
   const range = document.createRange();
   range.selectNode(output);
@@ -242,13 +263,12 @@ copyBtn.addEventListener("click", () => {
   }
 });
 
-// Generate Worksheet
 document.getElementById("generate-btn").addEventListener("click", async () => {
   const subject = document.getElementById("subject").value;
   const year = document.getElementById("year").value;
   const topic = document.getElementById("topic").value;
   const difficulty = document.getElementById("difficulty").value;
-  const count = document.getElementById("numQuestions").value;
+  const numQuestions = document.getElementById("numQuestions").value;
   const button = document.getElementById("generate-btn");
 
   output.innerHTML = "Thinking...";
@@ -256,11 +276,18 @@ document.getElementById("generate-btn").addEventListener("click", async () => {
   button.disabled = true;
   btnText.innerHTML = "Generating<span class='spinner'></span>";
 
+  // 🧼 Reset feedback
+  document.getElementById("rating").value = "";
+  document.getElementById("comment").value = "";
+  feedbackSection.style.display = "none";
+  feedbackMsg.style.display = "none";
+  document.getElementById("submit-feedback").disabled = false;
+
   try {
     const response = await fetch("http://localhost:3000/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ subject, year, topic, difficulty, count })
+      body: JSON.stringify({ subject, year, topic, difficulty, count: numQuestions })
     });
 
     const data = await response.json();
@@ -270,7 +297,7 @@ document.getElementById("generate-btn").addEventListener("click", async () => {
     }
 
     const html = `
-      <h2>${topic}</h2>
+      <h2>${topic} Worksheet</h2>
       <p><strong>Subject:</strong> ${subject}</p>
       <p><strong>Name:</strong> ______________________ &nbsp;&nbsp;&nbsp;&nbsp; <strong>Date:</strong> _______________</p>
       <hr style="margin: 12px 0 24px 0;" />
@@ -283,6 +310,7 @@ document.getElementById("generate-btn").addEventListener("click", async () => {
     `;
 
     output.innerHTML = html;
+    feedbackSection.style.display = "block";
   } catch (error) {
     console.error("❌ Error:", error);
     output.innerHTML = "<p>❌ Error generating worksheet. Is the server running?</p>";
@@ -291,7 +319,38 @@ document.getElementById("generate-btn").addEventListener("click", async () => {
     btnText.textContent = "Generate";
   }
 });
-</script>
 
+document.getElementById("submit-feedback").addEventListener("click", async () => {
+  const subject = document.getElementById("subject").value;
+  const year = document.getElementById("year").value;
+  const topic = document.getElementById("topic").value;
+  const difficulty = document.getElementById("difficulty").value;
+  const rating = document.getElementById("rating").value;
+  const comment = document.getElementById("comment").value;
+
+  if (!rating) {
+    alert("Please select a rating before submitting.");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:3000/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ subject, year, topic, difficulty, rating, comment })
+    });
+
+    const result = await response.json();
+    feedbackMsg.style.display = "block";
+    document.getElementById("submit-feedback").disabled = true;
+
+    setTimeout(() => {
+      feedbackSection.style.display = "none";
+    }, 2500);
+  } catch (err) {
+    alert("❌ Failed to submit feedback.");
+  }
+});
+</script>
 </body>
 </html>
