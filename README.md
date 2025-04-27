@@ -6,32 +6,38 @@ An AI-powered application designed to generate subject-specific student workshee
 
 ### 👥 Who Is This For?
 
-- Teachers at UK secondary schools (Years 7–11)
-- Curriculum planners exploring AI in education
-- IT teams and EdTech developers building GPT-powered tools
+- Subject teachers looking to reduce workload
+- Curriculum planners exploring generative AI tools
+- Developers interested in the practical application of AI in education 
 
 #
 
 ### 🧱 Tech Stack
 
-- **Frontend**: HTML, CSS, Bootstrap 5, JavaScript
-- **Fonts**: Inter, Playfair Display via Google Fonts
-- **Backend**: Node.js + Express, OpenAI API (GPT-3.5 Turbo)
-- **Other**: Office.js (for potential Microsoft 365 integration)
+| Layer        | Stack / Tool                         |
+|--------------|---------------------------------------|
+| Frontend     | HTML, CSS, Bootstrap 5, JavaScript    |
+| Backend      | Node.js + Express                     |
+| AI           | OpenAI API (GPT-3.5 Turbo)            |
+| Database     | MongoDB Atlas                         |
+| Hosting      | (Railway planned)                     |
+| Fonts        | Inter + Playfair Display via Google   |
+| Optional     | Office.js for Microsoft 365 add-in    |
 
 #
 
 ### ✨ Features
 
-| Feature                    | Description                                     |
-|----------------------------|-------------------------------------------------|
-| 🧠 AI Worksheet Generation | Powered by OpenAI’s GPT-3.5 Turbo              |
-| 📝 Editable in-browser     | Inline editing directly in the interface       |
-| 🔐 Lock/Unlock Mode        | Toggle between read-only and editable output   |
-| 📋 Copy to Clipboard       | Paste into Word, Docs, or Teams instantly      |
-| 🖨️ Print / Export to PDF   | Clean layout for physical distribution         |
-| 🎯 Custom Difficulty/Count | Choose difficulty level & number of questions  |
-| 📚 Subject-Specific Prompts| WJEC-based curriculum context logic            
+| Feature                    | Description                                                |
+|----------------------------|------------------------------------------------------------|
+| 🧠 AI Worksheet Generation | Curriculum-aligned, scaffolded questions via GPT-3.5 Turbo |
+| 🎯 Customisable            | Choose subject, topic, year group, difficulty, question count |
+| 📝 Editable                | Lock/unlock inline worksheet editing                       |
+| 📋 Copy to Clipboard       | Copy output to Word, Docs or Teams                         |
+| 🖨️ Print / Export to PDF   | Clean A4 printable layout                                  |
+| 💬 Built-in Feedback       | Users can rate and comment on worksheet quality            |
+| 🔍 Data Logging            | Logs sessions, tokens, cost, usage for research/reporting  |
+| 📊 Atlas Dashboard Ready   | Live dashboard built with MongoDB Charts                   |  
 
 #
 
@@ -62,9 +68,9 @@ worksheet-generator/
 │   └── assets/
 │       ├── blossom.png
 │       └── collab-logo.png
-├── taskpane3.html             # Main frontend UI
-├── index.js                   # Express backend server
-├── .env                       # API key config
+├── frontend.html             # Main frontend UI
+├── backend.js                   # Express backend server
+├── .env                       # API key config & MongoDB URI
 └── package.json
 ```
 
@@ -88,13 +94,18 @@ npm install
 3. Create a `.env` file and paste in your OpenAI API key
 
 ```shell
-  echo "OPENAI_API_KEY=your-api-key-here" > .env
+echo "OPENAI_API_KEY=your-api-key-here" > .env
 ```
 
-4. Start the backend server
+4. Add the MongoDB URI to the .env file
 
 ```shell
-   npm start 
+echo "MONGO_URI=your-mongodb-uri" >> .env
+```   
+5. Start the backend server
+
+```shell
+npm start 
 ```
 
 This uses the `start` script defined in `package.json`, which runs `node index.js`.
@@ -103,11 +114,12 @@ This uses the `start` script defined in `package.json`, which runs `node index.j
 
 ### 🌐 How to Use
 
-1. Open `taskpane3.html` in your browser
-2. Select the **Subject**, **Year Group**, **Difficulty**, and enter a **Topic**
-3. Choose the **Number of Questions** (1–10)
-4. Click **Generate**
-5. Edit inline, **copy** to clipboard, or **print** to PDF
+1. Open frontend.html in your browser
+2. Fill in subject, year group, topic, difficulty, and number of questions (1–10)
+3. Click Generate
+4. Output appears in a printable, editable panel
+5. Lock/unlock, copy to clipboard, print to PDF
+6. Provide feedback — submitted directly to your Atlas database
 
 #
 
@@ -137,7 +149,14 @@ Instructions:
 - Context: Focus on problem solving and step-by-step methods aligned with WJEC Maths curriculum.
 ```
 
+### 📊 Data Collection
+
+MongoDB Atlas is used to log each worksheet generation and feedback submission. This enables session tracking, token/cost estimation, and user sentiment analysis. Sessions collection logs metadata (e.g. subject, topic, token usage, and generation time). Feedback collection captures user ratings and optional comments tied to each worksheet. This data can be visualised in MongoDB Charts to track usage trends and support research reporting during trials.
+
+<img src="https://via.placeholder.com/800x450.png?text=MongoDB+Dashboard+SetUp" width="600" alt="Dashboard interface preview" />
+
 #
+
 ### 🧪 Test the API Endpoint (optional)
 
 You can also test if API calls are being made directly via the terminal using `Curl`. This could be useful when troubleshooting or debugging any issues that may arise during generation.
@@ -152,19 +171,20 @@ curl http://localhost:3000/generate \
 
 ### 🚧 Roadmap
 
-- [ ]  Work with educators to improve subject-specific prompt logic
-- [ ]  Set up database for logging (MongoDB)
+- [x]  Work with educators to improve subject-specific prompt logic
+- [x]  Set up database for logging (MongoDB)
 - [ ]  Cloud Deployment (Railway)
+- [ ]  Write research proposal
 - [ ]  Apply for the OpenAI Researcher Access Program
-- [ ]  Test in live environment and collect feedback from users
+- [ ]  Conduct trial and analyse data collection
+- [ ]  Compile findings into a report
 
 #
 
 ### 🤝 Collaboration
 
-This project was built by a TA in a UK (Welsh) secondary school with a vision to reduce workload, improve efficiency, and empower teaching staff to engage with, and explore AI responsibly.
-
-Contributions are welcome, especially from teachers, curriculum leaders, and devs in education.
+This project was created by a TA at a UK (Welsh) secondary school. It’s open source and aims to improve efficiency, reduce workload, and introduce AI in a responsible way.
+Contributions welcome from teachers, curriculum leaders, and EdTech devs
 
 #
 
@@ -176,7 +196,7 @@ MIT — open too modification, adaptation and deployment by other schools or edu
 
 ### 📣 Questions?
 
-Open an issue, fork the repo, or get in touch.
+Open an issue, fork the repo, or reach out via GitHub Discussions.
 
 ---
 
