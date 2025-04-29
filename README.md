@@ -91,24 +91,18 @@ cd worksheet-generator
 npm install
 ```
 
-3. Install MongoDB
-
-```shell
-npm install mongodb
-```
-
-4. Create a `.env` file and paste in your OpenAI API key
+3. Create a `.env` file and paste in your OpenAI API key
 
 ```shell
 echo "OPENAI_API_KEY=your-api-key-here" > .env
 ```
 
-5. Add the MongoDB URI to the .env file
+4. Add the MongoDB URI to the .env file
 
 ```shell
 echo "MONGO_URI=your-mongodb-uri" >> .env
 ```   
-6. Start the backend server
+5. Start the backend server
 
 ```shell
 npm start 
