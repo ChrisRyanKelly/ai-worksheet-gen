@@ -20,7 +20,7 @@ An AI-powered application designed to generate subject-specific student workshee
 | Backend      | Node.js + Express                     |
 | AI           | OpenAI API (GPT-3.5 Turbo)            |
 | Database     | MongoDB Atlas                         |
-| Hosting      | (Railway planned)                     |
+| Hosting      | (GitHub Pages + Railway)              |
 | Fonts        | Inter + Playfair Display via Google   |
 | Optional     | Office.js for Microsoft 365 add-in    |
 
@@ -68,7 +68,7 @@ worksheet-generator/
 │   └── assets/
 │       ├── blossom.png
 │       └── collab-logo.png
-├── frontend.html             # Main frontend UI
+├── index.html             # Main frontend UI
 ├── backend.js                   # Express backend server
 ├── .env                       # API key config & MongoDB URI
 └── package.json
@@ -173,11 +173,11 @@ curl http://localhost:3000/generate \
 
 - [x]  Work with educators to improve subject-specific prompt logic
 - [x]  Set up database for logging (MongoDB)
-- [ ]  Cloud Deployment (Railway)
-- [ ]  Write research proposal
-- [ ]  Apply for the OpenAI Researcher Access Program
+- [x]  Deployment (GitHub Pages + Railway)
+- [x]  Write up
+- [ ]  Apply to the OpenAI Researcher Access Program
 - [ ]  Conduct trial and analyse data collection
-- [ ]  Compile findings into a report
+- [ ]  Evaluate findings
 
 #
 
