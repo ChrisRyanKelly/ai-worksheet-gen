@@ -153,7 +153,7 @@ Instructions:
 
 MongoDB Atlas is used to log each worksheet generation and feedback submission. This enables session tracking, token/cost estimation, and user sentiment analysis. Sessions collection logs metadata (e.g. subject, topic, token usage, and generation time). Feedback collection captures user ratings and optional comments tied to each worksheet. This data can be visualised in MongoDB Charts to track usage trends and support research reporting during trials.
 
-<img src="https://via.placeholder.com/800x450.png?text=MongoDB+Dashboard+SetUp" width="600" alt="Dashboard interface preview" />
+<img src="https://github.com/ChrisRyanKelly/ai-worksheet-gen/blob/master/public/assets/dashboard.png" width="600" alt="Dashboard interface preview" />
 
 #
 
